@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CMDotNet</RootNamespace>
     <AssemblyName>CMDotNet</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -42,17 +45,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AliasAttribute.cs" />
-    <Compile Include="Command.cs" />
-    <Compile Include="CommandCollection.cs" />
+    <Compile Include="ArgumentHelper.cs" />
     <Compile Include="CommandError.cs" />
-    <Compile Include="CommandExecuter.cs" />
-    <Compile Include="CommandExecutionResult.cs" />
-    <Compile Include="CommandModule.cs" />
+    <Compile Include="CommandInfo.cs" />
+    <Compile Include="CommandMessage.cs" />
     <Compile Include="CommandAttribute.cs" />
-    <Compile Include="CommandHost.cs" />
-    <Compile Include="ILogEntry.cs" />
-    <Compile Include="LogType.cs" />
+    <Compile Include="CommandModule.cs" />
+    <Compile Include="CommandService.cs" />
+    <Compile Include="ExecutionResult.cs" />
+    <Compile Include="IExecutionResult.cs" />
+    <Compile Include="ParameterInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemainderAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

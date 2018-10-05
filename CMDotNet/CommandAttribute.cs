@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YSource.Commands
+namespace CMDotNet
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public sealed class CommandAttribute : Attribute

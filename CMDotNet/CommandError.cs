@@ -1,8 +1,7 @@
-﻿namespace YSource.Commands
+﻿namespace CMDotNet
 {
     public enum CommandError
     {
-        None,
         UnknownCommand,
         InvalidParameters,
         RuntimeException

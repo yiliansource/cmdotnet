@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace CMDotNet
 {
-    public abstract class CommandModule
+    public interface IExecutionResult
     {
+        CommandError? Error { get; }
+        string ErrorReason { get; }
+        bool IsSuccess { get; }
     }
 }
