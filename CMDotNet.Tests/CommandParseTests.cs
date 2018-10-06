@@ -14,7 +14,7 @@ namespace CMDotNet.UnitTests
         public CommandParseTests()
         {
             _service = new CommandService();
-            _service.AddModulesAsync(Assembly.GetAssembly(typeof(ParseTestModule)));
+            _service.AddModulesAsync(Assembly.GetExecutingAssembly());
         }
 
         private void HandleCommand(CommandMessage msg)
@@ -38,15 +38,19 @@ namespace CMDotNet.UnitTests
         }
        
         [Test]
-        public void CommandNoParameters()
+        public void NoParameters()
             => TestCommand("ping");
 
         [Test]
-        public void CommandDynamicInteger()
+        public void DynamicInteger()
             => TestCommand("square 5");
 
         [Test]
-        public void CommandRemainderString()
+        public void RemainderString()
             => TestCommand("write This is a long string!");
+
+        [Test]
+        public void CustomType()
+            => TestCommand("mynum 42");
     }
 }

@@ -44,19 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AliasAttribute.cs" />
+    <Compile Include="Attributes\AliasAttribute.cs" />
     <Compile Include="ArgumentHelper.cs" />
     <Compile Include="CommandError.cs" />
     <Compile Include="CommandInfo.cs" />
     <Compile Include="CommandMessage.cs" />
-    <Compile Include="CommandAttribute.cs" />
+    <Compile Include="Attributes\CommandAttribute.cs" />
     <Compile Include="CommandModule.cs" />
     <Compile Include="CommandService.cs" />
     <Compile Include="ExecutionResult.cs" />
     <Compile Include="IExecutionResult.cs" />
     <Compile Include="ParameterInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemainderAttribute.cs" />
+    <Compile Include="Attributes\RemainderAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

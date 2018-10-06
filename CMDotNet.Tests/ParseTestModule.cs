@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
 
 namespace CMDotNet.UnitTests
 {
@@ -25,6 +20,12 @@ namespace CMDotNet.UnitTests
         public void Write([Remainder]string text)
         {
             Console.WriteLine(text);
+        }
+
+        [Command("mynum")]
+        public void MyNumTest(MyNum num)
+        {
+            Console.WriteLine($"The number is: { num.Num }!");
         }
     }
 }

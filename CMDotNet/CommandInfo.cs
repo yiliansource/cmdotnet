@@ -1,9 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CMDotNet
 {
@@ -23,9 +21,7 @@ namespace CMDotNet
             AliasAttribute aliasData = method.GetCustomAttribute<AliasAttribute>();
 
             if (commandData == null)
-            {
                 throw new ArgumentException("The passed method isn't a command.");
-            }
 
             return new CommandInfo
             {
@@ -40,9 +36,7 @@ namespace CMDotNet
         public static CommandInfo[] FromModule(Type moduleType)
         {
             if (!moduleType.IsSubclassOf(typeof(CommandModule)))
-            {
                 throw new ArgumentException("The passed type isn't a command module.");
-            }
 
             return moduleType
                 .GetMethods()
@@ -60,7 +54,7 @@ namespace CMDotNet
             {
                 if (Parameters.Count == 0)
                 {
-                    parameters = null;
+                    parameters = new object[0];
                 }
                 else
                 {
