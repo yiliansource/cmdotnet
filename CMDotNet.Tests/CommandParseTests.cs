@@ -9,7 +9,7 @@ namespace CMDotNet.UnitTests
     public class CommandParseTests
     {
         private readonly CommandService _service;
-        private const string COMMAND_PREFIX = "";
+        private const string COMMAND_PREFIX = ""; // The prefix that has to precede the command messages
 
         public CommandParseTests()
         {
@@ -17,7 +17,7 @@ namespace CMDotNet.UnitTests
             _service.AddModulesAsync(Assembly.GetExecutingAssembly());
         }
 
-        private void HandleCommand(CommandMessage msg)
+        private void HandleCommand(IMessage msg)
         {
             int argPos = 0;
             if (!msg.HasStringPrefix(COMMAND_PREFIX, ref argPos))
@@ -33,7 +33,7 @@ namespace CMDotNet.UnitTests
 
         private void TestCommand(string command)
         {
-            CommandMessage msg = new CommandMessage(command);
+            IMessage msg = new CommandMessage(command);
             HandleCommand(msg);
         }
        
@@ -52,5 +52,27 @@ namespace CMDotNet.UnitTests
         [Test]
         public void CustomType()
             => TestCommand("mynum 42");
+
+        [Test]
+        public void AliasCommand()
+            => TestCommand("alias");
+
+        [Test]
+        public void PrefixedCommand()
+        {
+            string prefix = "[this is a prefix]";
+            IMessage msg = new CommandMessage(prefix + "ping");
+
+            int argPos = 0;
+            if (!msg.HasStringPrefix(prefix, ref argPos))
+                Assert.Fail("Command wasn't detected to have a prefix.");
+
+            IExecutionResult result = _service.Execute(msg, argPos);
+            if (!result.IsSuccess)
+            {
+                Console.WriteLine($"{ result.Error }: { result.ErrorReason }");
+                Assert.Fail();
+            }
+        }
     }
 }

@@ -5,10 +5,16 @@ using System.Collections.Generic;
 
 namespace CMDotNet
 {
+    /// <summary>
+    /// Represents a service that can be used to invoke commands.
+    /// </summary>
     public class CommandService
     {
         private IReadOnlyCollection<CommandInfo> _commands;
 
+        /// <summary>
+        /// Registers all modules in the given assembly to the service.
+        /// </summary>
         public void AddModulesAsync(Assembly source)
         {
             _commands = source.GetExportedTypes()
@@ -17,20 +23,22 @@ namespace CMDotNet
                 .ToArray();
         }
 
-        public IExecutionResult Execute(CommandMessage msg, int argPos)
+        /// <summary>
+        /// Executes a command, given by a message.
+        /// </summary>
+        public IExecutionResult Execute(IMessage msg, int argPos)
         {
             CommandInfo command = Search(msg, argPos);
             if (command == null)
-            {
                 return ExecutionResult.FromError(CommandError.UnknownCommand, "The command doesn't exist or wasn't registered.");
-            }
             else
-            {
                 return command.Execute(msg, argPos);
-            }
         }
 
-        public CommandInfo Search(CommandMessage msg, int argPos)
+        /// <summary>
+        /// Searches the service for a command, by the data of a message.
+        /// </summary>
+        public CommandInfo Search(IMessage msg, int argPos)
         {
             ArgumentHelper.ExtractNameAndArgs(msg, argPos, out string name, out string[] args);
 
@@ -39,7 +47,7 @@ namespace CMDotNet
             if (nameMatches.Count() == 0)
             {
                 // No matches were found? Try again with alias.
-                nameMatches = _commands.Where(command => command.Aliases.Any(alias => string.Equals(alias, name, StringComparison.InvariantCultureIgnoreCase)));
+                nameMatches = _commands.Where(command => command.Aliases != null && command.Aliases.Any(alias => string.Equals(alias, name, StringComparison.InvariantCultureIgnoreCase)));
                 if (nameMatches.Count() == 0)
                 {
                     // No command was found.
@@ -61,5 +69,10 @@ namespace CMDotNet
             // Return the first match. Multiple matches should not be possible.
             return parameterMatches.First();
         }
+        /// <summary>
+        /// Returns all commands that have been registered into the service.
+        /// </summary>
+        public IEnumerable<CommandInfo> GetRegisteredCommands()
+            => _commands;
     }
 }

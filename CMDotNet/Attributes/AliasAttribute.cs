@@ -2,6 +2,9 @@
 
 namespace CMDotNet
 {
+    /// <summary>
+    /// Indicates aliases for a command.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public sealed class AliasAttribute : Attribute
     {

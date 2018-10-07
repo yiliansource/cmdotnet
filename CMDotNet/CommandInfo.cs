@@ -5,16 +5,34 @@ using System.Collections.Generic;
 
 namespace CMDotNet
 {
+    /// <summary>
+    /// Holds information about a command.
+    /// </summary>
     public class CommandInfo
     {
+        /// <summary>
+        /// The name of the command.
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// The aliases of a command.
+        /// </summary>
         public IReadOnlyCollection<string> Aliases { get; set; }
+        /// <summary>
+        /// The parameters of the command method.
+        /// </summary>
         public IReadOnlyCollection<ParameterInfo> Parameters { get; set; }
+        /// <summary>
+        /// The attributes of the command.
+        /// </summary>
         public IReadOnlyCollection<Attribute> Attributes;
 
         private MethodInfo _method;
 
         private CommandInfo() { }
+        /// <summary>
+        /// Creates a new <see cref="CommandInfo"/> from a <see cref="MethodInfo"/>.
+        /// </summary>
         public static CommandInfo FromMethod(MethodInfo method)
         {
             CommandAttribute commandData = method.GetCustomAttribute<CommandAttribute>();
@@ -33,6 +51,9 @@ namespace CMDotNet
                 _method = method
             };
         }
+        /// <summary>
+        /// Extracts all the commands from a module of the specified type.
+        /// </summary>
         public static CommandInfo[] FromModule(Type moduleType)
         {
             if (!moduleType.IsSubclassOf(typeof(CommandModule)))
@@ -45,7 +66,10 @@ namespace CMDotNet
                 .ToArray();
         }
 
-        public IExecutionResult Execute(CommandMessage msg, int argPos)
+        /// <summary>
+        /// Invokes the command using the arguments from the given command message and returns the execution result.
+        /// </summary>
+        public IExecutionResult Execute(IMessage msg, int argPos)
         {
             ArgumentHelper.ExtractNameAndArgs(msg, argPos, out string name, out string[] args);
 

@@ -27,5 +27,11 @@ namespace CMDotNet.UnitTests
         {
             Console.WriteLine($"The number is: { num.Num }!");
         }
+
+        [Command("aliasedcommand"), Alias("alias")]
+        public void AliasTest()
+        {
+            Console.WriteLine("This was an alias command!");
+        }
     }
 }
