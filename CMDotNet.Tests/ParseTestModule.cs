@@ -33,5 +33,14 @@ namespace CMDotNet.UnitTests
         {
             Console.WriteLine("This was an alias command!");
         }
+
+        [Command("sum")]
+        public void SumNumbers(params int[] nums)
+        {
+            int sum = 0;
+            for (int i = 0; i < nums.Length; i++)
+                sum += nums[i];
+            Console.WriteLine($"The sum of the numbers is { sum }!");
+        }
     }
 }

@@ -82,7 +82,8 @@ namespace CMDotNet
                 }
                 else
                 {
-                    if (Parameters.Last().IsRemainder)
+                    var lastPar = Parameters.Last();
+                    if (lastPar.IsRemainder || lastPar.IsParamsArray)
                     {
                         int preRemainderLength = Parameters.Count - 1;
                         var preRemainderParameters = Parameters.Take(preRemainderLength);
@@ -90,11 +91,14 @@ namespace CMDotNet
 
                         var parsedPreRemainderParameters = preRemainderArgs.Zip(preRemainderParameters, (s, info) => info.ConvertToParameterType(s)).ToList();
 
-                        var lastPar = Parameters.Last();
-                        var remainder = string.Join(" ", args.Skip(preRemainderLength).ToArray());
+                        string[] remainderArgs = args.Skip(preRemainderLength).ToArray();
+                        object parsedRemainder = null;
+                        if (lastPar.IsRemainder)
+                            parsedRemainder = lastPar.ConvertToParameterType(string.Join(" ", remainderArgs));
+                        if (lastPar.IsParamsArray)
+                            parsedRemainder = lastPar.ConvertToParameterTypeArray(remainderArgs);
 
-                        parsedPreRemainderParameters.Add(lastPar.ConvertToParameterType(remainder));
-
+                        parsedPreRemainderParameters.Add(parsedRemainder);
                         parameters = parsedPreRemainderParameters.ToArray();
                     }
                     else

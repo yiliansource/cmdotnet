@@ -59,7 +59,7 @@ namespace CMDotNet
             if (parameterMatches.Count() == 0)
             {
                 // No matches were found? Try again, this time regarding the [Remainder] attribute.
-                parameterMatches = nameMatches.Where(command => command.Parameters.Last().IsRemainder && command.Parameters.Count <= args.Length);
+                parameterMatches = nameMatches.Where(command => (command.Parameters.Last().IsRemainder || command.Parameters.Last().IsParamsArray) && command.Parameters.Count <= args.Length);
                 if (parameterMatches.Count() == 0)
                 {
                     // No command was found.

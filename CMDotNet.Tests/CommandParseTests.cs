@@ -58,6 +58,10 @@ namespace CMDotNet.UnitTests
             => TestCommand("alias");
 
         [Test]
+        public void ParamsArray()
+            => TestCommand("sum 1 2 3 4");
+
+        [Test]
         public void PrefixedCommand()
         {
             string prefix = "[this is a prefix]";
