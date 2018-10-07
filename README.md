@@ -14,7 +14,7 @@ This library offers the functionality of integrating command-line style command 
 
 ## How do I use the library?
 
-The [wiki](.../wiki) contains all information to get you started, as well as a guide on how to create your commands!
+The [wiki](../../wiki) contains all information to get you started, as well as a guide on how to create your commands!
 
 ## Is the library free to use?
 
