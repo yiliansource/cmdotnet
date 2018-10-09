@@ -66,6 +66,35 @@ namespace CMDotNet
                 .ToArray();
         }
 
+        private object[] ParseArgumentsToParameters(string[] args)
+        {
+            if (Parameters.Count == 0)
+                return new object[0];
+            else
+            {
+                var lastPar = Parameters.Last();
+                if (lastPar.IsRemainder || lastPar.IsParamsArray)
+                {
+                    int preRemainderLength = Parameters.Count - 1;
+                    var preRemainderParameters = Parameters.Take(preRemainderLength);
+                    var preRemainderArgs = args.Take(preRemainderLength);
+
+                    var parsedPreRemainderParameters = preRemainderArgs.Zip(preRemainderParameters, (s, info) => info.ConvertToParameterType(s)).ToList();
+
+                    string[] remainderArgs = args.Skip(preRemainderLength).ToArray();
+                    object parsedRemainder = null;
+                    if (lastPar.IsRemainder)
+                        parsedRemainder = lastPar.ConvertToParameterType(string.Join(" ", remainderArgs));
+                    if (lastPar.IsParamsArray)
+                        parsedRemainder = lastPar.ConvertToParameterTypeArray(remainderArgs);
+
+                    parsedPreRemainderParameters.Add(parsedRemainder);
+                    return parsedPreRemainderParameters.ToArray();
+                }
+                else return args.Zip(Parameters, (s, info) => info.ConvertToParameterType(s)).ToArray();
+            }
+        }
+
         /// <summary>
         /// Invokes the command using the arguments from the given command message and returns the execution result.
         /// </summary>
@@ -76,36 +105,7 @@ namespace CMDotNet
             object[] parameters;
             try
             {
-                if (Parameters.Count == 0)
-                {
-                    parameters = new object[0];
-                }
-                else
-                {
-                    var lastPar = Parameters.Last();
-                    if (lastPar.IsRemainder || lastPar.IsParamsArray)
-                    {
-                        int preRemainderLength = Parameters.Count - 1;
-                        var preRemainderParameters = Parameters.Take(preRemainderLength);
-                        var preRemainderArgs = args.Take(preRemainderLength);
-
-                        var parsedPreRemainderParameters = preRemainderArgs.Zip(preRemainderParameters, (s, info) => info.ConvertToParameterType(s)).ToList();
-
-                        string[] remainderArgs = args.Skip(preRemainderLength).ToArray();
-                        object parsedRemainder = null;
-                        if (lastPar.IsRemainder)
-                            parsedRemainder = lastPar.ConvertToParameterType(string.Join(" ", remainderArgs));
-                        if (lastPar.IsParamsArray)
-                            parsedRemainder = lastPar.ConvertToParameterTypeArray(remainderArgs);
-
-                        parsedPreRemainderParameters.Add(parsedRemainder);
-                        parameters = parsedPreRemainderParameters.ToArray();
-                    }
-                    else
-                    {
-                        parameters = args.Zip(Parameters, (s, info) => info.ConvertToParameterType(s)).ToArray();
-                    }
-                }
+                parameters = ParseArgumentsToParameters(args);
             }
             catch (Exception)
             {

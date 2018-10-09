@@ -17,9 +17,13 @@ namespace CMDotNet
         /// </summary>
         public void AddModulesAsync(Assembly source)
         {
-            _commands = source.GetExportedTypes()
-                .Where(type => type.IsSubclassOf(typeof(CommandModule)))
-                .SelectMany(module => CommandInfo.FromModule(module))
+            if (_commands == null)
+                _commands = new CommandInfo[0];
+
+            _commands = _commands.Concat(
+                    source.GetExportedTypes()
+                    .Where(type => type.IsSubclassOf(typeof(CommandModule)))
+                    .SelectMany(module => CommandInfo.FromModule(module)))
                 .ToArray();
         }
 
