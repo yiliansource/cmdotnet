@@ -30,6 +30,7 @@ namespace CMDotNet
                 argPos = prefix.Length;
                 return true;
             }
+            argPos = 0;
             return false;
         }
 

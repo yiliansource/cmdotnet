@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Attributes\AliasAttribute.cs" />
     <Compile Include="ArgumentHelper.cs" />
+    <Compile Include="CommandContext.cs" />
     <Compile Include="CommandError.cs" />
     <Compile Include="CommandInfo.cs" />
     <Compile Include="CommandMessage.cs" />

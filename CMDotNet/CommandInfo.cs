@@ -96,9 +96,11 @@ namespace CMDotNet
         }
 
         /// <summary>
-        /// Invokes the command using the arguments from the given command message and returns the execution result.
+        /// Invokes the command, using the arguments from a message.
         /// </summary>
-        public IExecutionResult Execute(IMessage msg, int argPos)
+        /// <param name="msg">The message where the arguments are located.</param>
+        /// <param name="argPos">The first character index after the prefix ends. 0 if there is no prefix.</param>
+        public IExecutionResult Execute(IMessage msg, int argPos, CommandContext context)
         {
             ArgumentHelper.ExtractNameAndArgs(msg, argPos, out string name, out string[] args);
 
@@ -114,7 +116,9 @@ namespace CMDotNet
 
             if (parameters != null)
             {
-                object source = Activator.CreateInstance(_method.DeclaringType);
+                CommandModule source = Activator.CreateInstance(_method.DeclaringType) as CommandModule;
+                source.Context = context;
+
                 try
                 {
                     _method.Invoke(source, parameters);

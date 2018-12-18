@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
@@ -10,33 +11,59 @@ namespace CMDotNet
     /// </summary>
     public class CommandService
     {
+        /// <summary>
+        /// The standard writer to output to. <see cref="Console.Out"/> by default.
+        /// </summary>
+        public TextWriter Out { get; set; } = Console.Out;
+
         private IReadOnlyCollection<CommandInfo> _commands;
+
+        /// <summary>
+        /// Creates a new instance of a command service.
+        /// </summary>
+        public CommandService() 
+        {
+            _commands = new CommandInfo[0];
+        }
 
         /// <summary>
         /// Registers all modules in the given assembly to the service.
         /// </summary>
         public void AddModulesAsync(Assembly source)
         {
-            if (_commands == null)
-                _commands = new CommandInfo[0];
-
             _commands = _commands.Concat(
                     source.GetExportedTypes()
                     .Where(type => type.IsSubclassOf(typeof(CommandModule)))
                     .SelectMany(module => CommandInfo.FromModule(module)))
                 .ToArray();
         }
-
+        
         /// <summary>
         /// Executes a command, given by a message.
         /// </summary>
+        /// <param name="msg">The message where the command is located.</param>
+        /// <param name="argPos">The first character index after the prefix ends. 0 if there is no prefix.</param>
         public IExecutionResult Execute(IMessage msg, int argPos)
+        {
+            CommandContext defaultContext = new CommandContext
+            {
+                Out = Out
+            };
+            return Execute(msg, argPos, defaultContext);
+        }
+        /// <summary>
+        /// Executes a command, given by a message.
+        /// </summary>
+        /// <param name="msg">The message where the command is located.</param>
+        /// <param name="argPos">The first character index after the prefix ends. 0 if there is no prefix.</param>
+        /// <param name="context">The context, in which the command is executed.</param>
+        public IExecutionResult Execute(IMessage msg, int argPos, CommandContext context)
         {
             CommandInfo command = Search(msg, argPos);
             if (command == null)
                 return ExecutionResult.FromError(CommandError.UnknownCommand, "The command doesn't exist or wasn't registered.");
             else
-                return command.Execute(msg, argPos);
+                return command.Execute(msg, argPos, context);
         }
 
         /// <summary>

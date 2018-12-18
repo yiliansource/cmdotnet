@@ -10,7 +10,7 @@ namespace CMDotNet.UnitTests
     {
         private readonly CommandService _service;
         private const string COMMAND_PREFIX = ""; // The prefix that has to precede the command messages
-
+        
         public CommandParseTests()
         {
             _service = new CommandService();
